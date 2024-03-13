@@ -1,0 +1,99 @@
+.form-verification {
+    border: 1px solid #dee2e6;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    margin: auto;
+    margin-top: 100px;
+    max-width: 500px;
+}
+
+.verification-heading {
+    text-align: center;
+    font-size: 20px;
+    font-family: Roboto-Regular, Helvetica, Arial, sans-serif;
+    border-top-left-radius: 0.25rem;
+    border-top-right-radius: 0.25rem;
+    color: white;
+    background-color: #26a69a !important;
+    padding: 10px
+}
+
+.verification-body {
+    margin: 20px;
+    text-align: center;
+}
+
+.input-email {
+    height: 38px;
+    max-width: 100%;
+    font-size: 18px;
+    margin-bottom: 20px;
+}
+
+.input-verification {
+    height: 38px;
+    max-width: 10%;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+.form-verification,
+.input-email,
+.input-verification {
+    resize: none;
+    border: 0;
+    color: #4c4c4c;
+    font-family: 'Hind Madurai', sans-serif;
+    background-color: transparent;
+    border-bottom: 1px solid rgba(152, 152, 152, 0.8);
+    border-radius: 0 !important;
+    -webkit-box-shadow: none;
+    box-shadow: none;
+    -webkit-transition: all 300ms linear;
+    -moz-transition: all 300ms linear;
+    -o-transition: all 300ms linear;
+    transition: all 300ms linear;
+    text-align: center;
+}
+
+.ms5 {
+    margin-left: 76.66px;
+}
+
+.cooldown {
+    margin-left: 76.66px;
+}
+
+.input-verification:focus,
+.input-email {
+    border-bottom: 1px solid #00acc1;
+    box-shadow: 0 1px 0 #00acc1;
+    outline: 0 !important;
+}
+
+fieldset[disabled] .input-verification {
+    background-color: #ffffff;
+}
+
+.verification-error {
+    box-shadow: 0 0 2px red;
+}
+
+.verification-error {
+    box-shadow: 0 0 2px red;
+}
+
+.varification-alert-danger {
+    color: #842029;
+    background-color: #f8d7da;
+    border-color: #f5c2c7;
+}
+
+.verification-alert {
+    position: relative;
+    padding: 1rem 1rem;
+    margin-bottom: 1rem;
+    border: 1px solid transparent;
+    border-radius: 0.25rem;
+    display: none;
+}
