@@ -15,7 +15,7 @@ return [
     |
     */
 
-    'default' => env('DB_CONNECTION', 'mysql'),
+    'default' => env('DB_CONNECTION', 'pgsql'),
 
     /*
     |--------------------------------------------------------------------------
@@ -65,12 +65,12 @@ return [
 
         'pgsql' => [
             'driver' => 'pgsql',
-            'url' => env('DATABASE_URL'),
-            'host' => env('DB_HOST', '127.0.0.1'),
+            'url' => env('postgres://root:A9FdjDVl3d7W57iGyax63epjk0VAe8KO@dpg-cnliq96n7f5s73cu15r0-a/inventory_db_62j8'),
+            'host' => env('DB_HOST', 'dpg-cnliq96n7f5s73cu15r0-a.oregon-postgres.render.com'),
             'port' => env('DB_PORT', '5432'),
-            'database' => env('DB_DATABASE', 'forge'),
-            'username' => env('DB_USERNAME', 'forge'),
-            'password' => env('DB_PASSWORD', ''),
+            'database' => env('DB_DATABASE', 'inventory_db_62j8'),
+            'username' => env('DB_USERNAME', 'root'),
+            'password' => env('DB_PASSWORD', 'A9FdjDVl3d7W57iGyax63epjk0VAe8KO'),
             'charset' => 'utf8',
             'prefix' => '',
             'prefix_indexes' => true,

@@ -37,12 +37,12 @@ Route::get('/get-location', function () {
 use Spatie\Permission\Models\Permission;
 
 Route::get('/permission', function () {
-    /* $permission = Permission::create(['name' => 'VIEW']);
+    $permission = Permission::create(['name' => 'VIEW']);
     $permission = Permission::create(['name' => 'CREATE']);
     $permission = Permission::create(['name' => 'EDIT']);
-    $permission = Permission::create(['name' => 'DELETE']); */
-    /*      $user = AssetModel::with(['modelof_mannuf.manufaturer', 'supplier', 'location'])->get();*/
-    /*     Permission::create(['name' => 'create-location']);
+    $permission = Permission::create(['name' => 'DELETE']); 
+    $user = AssetModel::with(['modelof_mannuf.manufaturer', 'supplier', 'location'])->get();
+    Permission::create(['name' => 'create-location']);
     Permission::create(['name' => 'create-role']);
     Permission::create(['name' => 'create-asset']);
 
@@ -56,7 +56,19 @@ Route::get('/permission', function () {
 
     Permission::create(['name' => 'delete-location']);
     Permission::create(['name' => 'delete-role']);
-    Permission::create(['name' => 'delete-asset']); */
+    Permission::create(['name' => 'delete-asset']);
     $assets  = AssetModel::with(['modelof_mannuf.manufaturer', 'supplier', 'location.department', 'image'])->get();
     return response()->json($assets);
+});
+Route::get('/givePermissionTo',function(){
+   $user = User::where('email', 'danh010500@gmail.com')->first();
+$permissions = Permission::all();
+if ($user) {
+    // Gán tất cả các quyền cho người dùng
+    $user->syncPermissions($permissions);
+
+    echo "Đã gán tất cả quyền cho người dùng.";
+} else {
+    echo "Không tìm thấy người dùng.";
+}
 });
