@@ -1,0 +1,4 @@
+services:
+  - name: queue-worker
+    env: production
+    command: php artisan queue:work --queue=emails
