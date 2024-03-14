@@ -1,10 +1,6 @@
 <?php
 
 use App\Http\Controllers\Auth\AuthController;
-use App\Http\Controllers\Auth\VerificationController;
-
-use App\Jobs\ProcessMail;
-use App\Mail\MailVerification;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
@@ -70,8 +66,8 @@ Route::post('/register', [AuthController::class, 'register'])->name('api.registe
 Route::post('/api-login', [AuthController::class, 'login'])->name('api.login');
 
 //action: verification
-/* Route::post('/api-verification', [AuthController::class, 'login'])->name('api.verification');
- */
+Route::post('/api-verification', [AuthController::class, 'login'])->name('api.verification');
+
 //action: logout
 Route::get('/logout', function () {
 

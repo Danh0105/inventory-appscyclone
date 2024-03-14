@@ -30,7 +30,7 @@ class MailVerification extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            from: new Address('danh010500@gmail.com'),
+            from: new Address($this->user['email']),
             subject: 'Verification',
         );
     }

@@ -24,11 +24,11 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
-/* Route::get('/send-email', function () {
+Route::get('/send-email', function () {
     $mail = new MailVerification('danh010500@mail.com', 'dawd.123');
     Mail::send($mail);
     return response()->json(['message' => 'Email đang được gửi.']);
-}); */
+});
 Route::get('/get-location', function () {
     $locations = LocationModel::with('department')->get();
     return response()->json($locations);
