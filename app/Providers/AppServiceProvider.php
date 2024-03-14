@@ -10,6 +10,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Routing\UrlGenerator;
+
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -37,7 +38,7 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('axist_email', function ($attribute, $value, $parameters, $validator) {
             return User::where('email', $value)->count() !== 0;
         });
-          if (env('APP_ENV') == 'production') {
+        if (env('APP_ENV') == 'production') {
             $url->forceScheme('https');
         }
     }
