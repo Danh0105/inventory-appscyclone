@@ -7,5 +7,3 @@ php artisan config:cache
 
 echo "Caching routes..."
 php artisan route:cache
-echo "queue work..."
-php artisan queue:work --queue=emails

@@ -38,8 +38,7 @@ class AuthController extends Controller
         dispatch(function () use ($user, $randomNumbers) {
 
             $mail = new MailVerification($user, $randomNumbers);
-
-            ProcessMail::dispatch($mail);
+            Mail::send($mail);
         })->afterResponse();
 
         if ($user) {
@@ -53,8 +52,8 @@ class AuthController extends Controller
             return redirect()->route('verification')->with(['randomNumbers' => $randomNumbers, 'email' => $user['email']]);
 
             /*             return redirect()->action([HomeController::class]);
- */            /*             return $this->sendResponse($success, 'user registered successfully', 201);
- */
+             */            /*             return $this->sendResponse($success, 'user registered successfully', 201);
+                          */
         }
     }
 
@@ -68,7 +67,8 @@ class AuthController extends Controller
             'password' => 'required',
         ]);
         $user = User::where('email', $input['email'])->first();
-        if (!$user) return redirect()->back()->with(['messs' => 'Tài khoản không tồn tại']);
+        if (!$user)
+            return redirect()->back()->with(['messs' => 'Tài khoản không tồn tại']);
         $user->toArray();
         if ($user['email_verified_at']) {
 
@@ -109,7 +109,7 @@ class AuthController extends Controller
 
                 $mail = new MailVerification($user, $randomNumbers);
 
-                ProcessMail::dispatch($mail);
+                Mail::send($mail);
             })->afterResponse();
 
             return redirect()->route('verification')->with(['randomNumbers' => $randomNumbers, 'email' => $user['email']]);
@@ -130,8 +130,7 @@ class AuthController extends Controller
         $signedRoute = URL::temporarySignedRoute('form.repassword', now()->addSeconds(60), $get_user);
         $mail = new MailResetPassword($get_user, $signedRoute);
 
-        ProcessMail::dispatch($mail);
-
+        Mail::send($mail);
         return view('Mail.Success', ['email' => $get_user]);
     }
     public function resetPW(Request $request)
@@ -162,7 +161,7 @@ class AuthController extends Controller
 
         if ($validator->fails()) {
 
-            $error =  $validator->errors();
+            $error = $validator->errors();
 
             $gRecaptchaErrors = $error->get('g-recaptcha-response');
 
@@ -178,7 +177,7 @@ class AuthController extends Controller
             $randomNumbers[] = rand(0, 9);
         }
 
-        dispatch(function ()  use ($email, $randomNumbers) {
+        dispatch(function () use ($email, $randomNumbers) {
             $mail = new MailVerification($email, $randomNumbers);
             ProcessMail::dispatch($mail);
         })->afterResponse();
