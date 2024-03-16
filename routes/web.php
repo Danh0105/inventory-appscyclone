@@ -8,6 +8,8 @@ use App\Http\Controllers\Admin\LocationsController;
 use App\Http\Controllers\Admin\UserController;
 use App\Http\Controllers\Admin\UserRoleController;
 use App\Http\Controllers\AdminUserRoleCreate;
+use App\Http\Controllers\ManufaturerModelsController;
+use App\Http\Controllers\SupplierController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -27,8 +29,10 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('locations', LocationsController::class);
     Route::resource('departments', DepartmentController::class);
     Route::resource('userrole', UserRoleController::class);
+    Route::resource('supplier', SupplierController::class);
+    Route::resource('manufaturer&models', ManufaturerModelsController::class);
     Route::resource('asset', AssetController::class);
-    Route::resource('/user', UserController::class);
+    Route::resource('user', UserController::class);
 });
 Route::get('/', function () {
     return view('Admin.Auth.index');
