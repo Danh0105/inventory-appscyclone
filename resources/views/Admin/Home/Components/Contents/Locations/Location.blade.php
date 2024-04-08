@@ -10,381 +10,348 @@
     <link href="/plugins/switchery/switchery.min.css" rel="stylesheet">
 @endsection
 
-@can('view-location')
-    @section('content')
-        <div class="row">
-            <div class="col-xs-12">
-                <div class="page-title-box">
-                    <h4 class="page-title">Locations</h4>
-                    <div class="clearfix"></div>
-                </div>
+{{-- @can('view-location') --}}
+@section('content')
+    <div class="row">
+        <div class="col-xs-12">
+            <div class="page-title-box">
+                <h4 class="page-title">Locations</h4>
+                <div class="clearfix"></div>
             </div>
         </div>
-        @if (Session::has('error_import'))
-            <div class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">
-                <button class="close" data-dismiss="alert" type="button" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-                <i class="mdi mdi-block-helper"></i>
-                {{ Session::get('error_import') }}
-            </div>
-        @endif
-        <div class="row">
-            <div class="col-sm-12">
-                <div class="card-box table-responsive">
-                    <div class="row" style="display: flex;justify-content: center;">
+    </div>
+    @if (Session::has('error_import'))
+        <div class="alert alert-icon alert-danger alert-dismissible fade in" role="alert">
+            <button class="close" data-dismiss="alert" type="button" aria-label="Close">
+                <span aria-hidden="true">×</span>
+            </button>
+            <i class="mdi mdi-block-helper"></i>
+            {{ Session::get('error_import') }}
+        </div>
+    @endif
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="card-box table-responsive">
+                <div class="row" style="display: flex;justify-content: center;">
 
-                        <ul class="nav nav-tabs tabs-bordered nav-justified">
-                            <li class="active">
-                                <a data-toggle="tab" href="#location1" aria-expanded="true">
-                                    <span class="visible-xs"><i class="fa fa-home"></i></span>
-                                    <span class="hidden-xs">Locations</span>
-                                </a>
-                            </li>
-                            <li class="">
-                                <a data-toggle="tab" href="#department1" aria-expanded="false">
-                                    <span class="visible-xs"><i class="fa fa-user"></i></span>
-                                    <span class="hidden-xs">Departments</span>
-                                </a>
-                            </li>
+                    <ul class="nav nav-tabs tabs-bordered nav-justified">
+                        <li class="active">
+                            <a data-toggle="tab" href="#location1" aria-expanded="true">
+                                <span class="visible-xs"><i class="fa fa-home"></i></span>
+                                <span class="hidden-xs">Locations</span>
+                            </a>
+                        </li>
+                        <li class="">
+                            <a data-toggle="tab" href="#department1" aria-expanded="false">
+                                <span class="visible-xs"><i class="fa fa-user"></i></span>
+                                <span class="hidden-xs">Departments</span>
+                            </a>
+                        </li>
 
-                        </ul>
+                    </ul>
+                </div>
+                <div class="row" style="display: flex;justify-content: right;margin:5px;">
+                    @can('create-location')
+                        <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                            data-target=".bs-example-modal-lg" style="margin:10px">
+                            NEW LOCATION
+                        </button>
+                    @endcan
+                    @can('create-location')
+                        <button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#myModal"
+                            style="margin:10px">IMPORT
+                            LOCATION</button>
+                    @endcan
+                </div>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="location1">
+                        <table class="table-striped table-colored table-info table" id="datatable">
+                            <thead>
+                                <tr>
+                                    <th>NO</th>
+                                    <th>NAME</th>
+                                    <th>ADDRESS</th>
+                                    <th>NOTES</th>
+                                    <th></th>
+
+                                </tr>
+                            </thead>
+
+                            <tbody id="TableBody">
+
+                                @foreach ($locations as $item)
+                                    <tr>
+                                        <td id="id">{{ $item['id'] }}</td>
+                                        <td>
+                                            <p id="name">{{ $item['location_name'] }}</p>
+                                            {{ $item['department']['department_name'] ?? '' }}
+                                        </td>
+                                        <td id="department" style="width: 500px;word-wrap:break-word;">
+                                            {{ $item['department']['floor'] ?? '' }},
+                                            {{ $item['department']['unit'] ?? '' }},
+                                            {{ $item['department']['building'] ?? '' }},
+                                            {{ $item['department']['street_address'] ?? '' }},
+                                            {{ $item['department']['city_name'] ?? '' }},
+                                            {{ $item['department']['state_name'] ?? '' }},
+                                            {{ $item['department']['country'] ?? '' }},
+                                            {{ $item['department']['zip_code'] ?? '' }}
+                                        </td>
+                                        <td>
+                                            <p id="note">{{ $item['note'] }}</p>
+                                        </td>
+                                        <td style="display: flex;flex-wrap: wrap;justify-content: center;gap: 3px;">
+                                            @can('edit-location')
+                                                <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                                                    data-target="#custom-width-modal" onclick="editRow(this)">Edit</button>
+                                            @endcan
+
+                                            <button class="btn btn-info waves-effect waves-light copy-button" type="button"
+                                                style="width: 70px;" onclick="copyRow(this)">Copy</button>
+                                            @can('delete-location')
+                                                <form class="formDelete" action="{{ route('locations.destroy', $item['id']) }}"
+                                                    method="POST">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-danger btn-bordered waves-effect waves-light"
+                                                        type="submit">Delete</button>
+                                                </form>
+                                            @endcan
+
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
-                    <div class="row" style="display: flex;justify-content: right;margin:5px;">
-                        @can('create-location')
+                    <div class="tab-pane" id="department1">
+                        <div class="row" style="display: flex;justify-content: right;margin:5px;">
                             <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
                                 data-target=".bs-example-modal-lg" style="margin:10px">
-                                NEW LOCATION
+                                NEW DEPARTMENT
                             </button>
-                        @endcan
-                        @can('create-location')
-                            <button class="btn btn-primary waves-effect waves-light" data-toggle="modal" data-target="#myModal"
-                                style="margin:10px">IMPORT
-                                LOCATION</button>
-                        @endcan
-                    </div>
-                    <div class="tab-content">
-                        <div class="tab-pane active" id="location1">
-                            <table class="table-striped table-colored table-info table" id="datatable">
-                                <thead>
-                                    <tr>
-                                        <th>NO</th>
-                                        <th>NAME</th>
-                                        <th>ADDRESS</th>
-                                        <th>NOTES</th>
-                                        <th></th>
-
-                                    </tr>
-                                </thead>
-
-                                <tbody id="TableBody">
-
-                                    @foreach ($locations as $item)
-                                        <tr>
-                                            <td id="id">{{ $item['id'] }}</td>
-                                            <td>
-                                                <p id="name">{{ $item['location_name'] }}</p>
-                                                {{ $item['department']['department_name'] ?? '' }}
-                                            </td>
-                                            <td id="department" style="width: 500px;word-wrap:break-word;">
-                                                {{ $item['department']['floor'] ?? '' }},
-                                                {{ $item['department']['unit'] ?? '' }},
-                                                {{ $item['department']['building'] ?? '' }},
-                                                {{ $item['department']['street_address'] ?? '' }},
-                                                {{ $item['department']['city_name'] ?? '' }},
-                                                {{ $item['department']['state_name'] ?? '' }},
-                                                {{ $item['department']['country'] ?? '' }},
-                                                {{ $item['department']['zip_code'] ?? '' }}
-                                            </td>
-                                            <td>
-                                                <p id="note">{{ $item['note'] }}</p>
-                                            </td>
-                                            <td style="display: flex;flex-wrap: wrap;justify-content: center;gap: 3px;">
-                                                @can('edit-location')
-                                                    <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
-                                                        data-target="#custom-width-modal" onclick="editRow(this)">Edit</button>
-                                                @endcan
-
-                                                <button class="btn btn-info waves-effect waves-light copy-button" type="button"
-                                                    style="width: 70px;" onclick="copyRow(this)">Copy</button>
-                                                @can('delete-location')
-                                                    <form class="formDelete" action="{{ route('locations.destroy', $item['id']) }}"
-                                                        method="POST">
-                                                        @csrf
-                                                        @method('DELETE')
-                                                        <button class="btn btn-danger btn-bordered waves-effect waves-light"
-                                                            type="submit">Delete</button>
-                                                    </form>
-                                                @endcan
-
-                                            </td>
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
-                        <div class="tab-pane" id="department1">
-                            Department
+                            <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+                                data-target="#myModal" style="margin:10px">IMPORT
+                                DEPARTMENT</button>
                         </div>
                     </div>
-
                 </div>
 
             </div>
+
         </div>
-        {{-- model --}}
-        <div class="modal fade bs-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
-            tabindex="-1" style="display: none;">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal" type="button" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="myLargeModalLabel">NEW LOCATION</h4>
-                    </div>
-                    <div class="modal-body">
-                        <div class="alert alert-success alert-dismissible fade in" id="alert-success" role="alert"
-                            style="position:sticky; top:20px;display:none;">
-                            <div id="mess"></div>
-                        </div>
-                        <form id="idForm" data-parsley-validate="" action="{{ route('locations.store') }}"
-                            novalidate="">
-                            @csrf
-                            <div class="form-group">
-                                <input class="form-control" id="location_name" name="location_name" type="text"
-                                    parsley-trigger="change" placeholder="Location name">
-                            </div>
-                            <div class="text-danger m-3" id="error_location"></div>
-                            <div class="form-group">
-                                <textarea class="form-control" id="note_create" name="note" rows="5" placeholder="Notes"></textarea>
-                            </div>
-                            <div class="form-group" style="width: 60%">
-                                <div class="btn-group bootstrap-select show-tick">
-                                    <select class="selectpicker show-tick" id="selectDepartment" name="department_model_id"
-                                        tabindex="-98">
-                                        <option value="0">Select Departments</option>
-                                        @foreach ($departments as $item)
-                                            <option value="{{ $item['id'] }}">{{ $item['department_name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="text-danger m-3" id="error_selectDepartment"></div>
-                            <div id="showdepartment" style="display: none;">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input class="form-control" id="floor" name="floor" type="text"
-                                                readonly parsley-trigger="change" required="" placeholder="FLOOR">
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input class="form-control" id="unit" name="unit" readonly
-                                                placeholder="UNIT">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="building" name="building" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="BUILDING">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="address" name="address" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="STREET ADDRESS">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="city" name="city" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="CITY">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="state" name="state" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="STATE">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <select class="selectpicker show-tick" id="country" name="country"
-                                                tabindex="-98">
-                                                <option>COUNTRY</option>
-                                                <option>HCM</option>
-                                                <option>Cà Mau</option>
-                                                <option>Lào Cai</option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input class="form-control" id="zipcode" name="zipcode" type="text"
-                                                readonly parsley-trigger="change" required="" placeholder="ZIP CODE">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-6" style="text-align: center;">
-                                    <button class="btn btn-primary waves-effect waves-light" type="submit"
-                                        style="width:80%">
-                                        CREATE LOCATION
-                                    </button>
-                                </div>
-                                <div class="col-md-6" style="text-align: center;">
-                                    <button class="btn btn-default waves-effect" id="cancel" type="reset"
-                                        style="width:80%">
-                                        Cancel
-                                    </button>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-        <!--Model edit -->
-        <div class="modal fade" id="custom-width-modal" role="dialog" aria-labelledby="custom-width-modalLabel"
-            aria-hidden="true" tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal" type="button" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="myLargeModalLabel">NEW LOCATION</h4>
-                    </div>
-                    <div class="modal-body">
-                        <form id="idFormEdit" data-parsley-validate="" action="{{ route('locations.update', [0]) }}"
-                            novalidate="" method="POST">
-                            @csrf
-                            @method('PUT')
-                            <input id="idedit" name="id" type="hidden" value="your-hidden-id-value">
-                            <div class="form-group">
-                                <input class="form-control" id="location_name_edit" name="location_name" type="text"
-                                    parsley-trigger="change" placeholder="Location name">
-                            </div>
-                            <div class="text-danger m-3" id="error_locationEdit"></div>
-                            <div class="form-group">
-                                <textarea class="form-control" id="note_edit" name="note" rows="5" placeholder="Notes"></textarea>
-                            </div>
-                            <div class="form-group" style="width: 60%">
-                                <div class="btn-group bootstrap-select show-tick">
-                                    <select class="selectpicker show-tick" id="selectDepartmentEdit"
-                                        name="department_model_id_edit" tabindex="-98">
-                                        <option value="0">Select Departments</option>
-                                        @foreach ($departments as $item)
-                                            <option value="{{ $item['id'] }}">{{ $item['department_name'] }}</option>
-                                        @endforeach
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="text-danger m-3" id="error_selectDepartmentEdit"></div>
-                            <div id="showdepartmentEdit" style="display: none;">
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input class="form-control" id="floorEdit" name="floor" type="text"
-                                                readonly parsley-trigger="change" required="" placeholder="FLOOR">
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input class="form-control" id="unitEdit" name="unit" readonly
-                                                placeholder="UNIT">
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="buildingEdit" name="building" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="BUILDING">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="addressEdit" name="address" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="STREET ADDRESS">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="cityEdit" name="city" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="CITY">
-                                </div>
-                                <div class="form-group">
-                                    <input class="form-control" id="stateEdit" name="state" type="text" readonly
-                                        parsley-trigger="change" required="" placeholder="STATE">
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <select class="selectpicker show-tick" id="countryEdit" name="country"
-                                                tabindex="-98">
-                                                <option>COUNTRY</option>
-                                                <option>HCM</option>
-                                                <option>Cà Mau</option>
-                                                <option>Lào Cai</option>
-                                            </select>
-                                        </div>
-
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group">
-                                            <input class="form-control" id="zipcodeEdit" name="zipcode" type="text"
-                                                readonly parsley-trigger="change" required="" placeholder="ZIP CODE">
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <hr>
-                            <div class="row">
-                                <div class="col-md-6" style="text-align: center;">
-                                    <button class="btn btn-primary waves-effect waves-light" type="submit"
-                                        style="width:80%">
-                                        EDIT
-                                    </button>
-                                </div>
-                                <div class="col-md-6" style="text-align: center;">
-                                    <button class="btn btn-default waves-effect" id="cancel" type="reset"
-                                        style="width:80%">
-                                        CANCEL
-                                    </button>
-                                </div>
-                            </div>
-
-                        </form>
-                    </div>
+    </div>
+    {{-- model --}}
+    <div class="modal fade bs-example-modal-lg" role="dialog" aria-labelledby="myLargeModalLabel" aria-hidden="true"
+        tabindex="-1" style="display: none;">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myLargeModalLabel">NEW DEPARTMENT</h4>
                 </div>
-            </div><!-- /.modal-dialog -->
-        </div>
-        <!-- Model import -->
-        <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
-            tabindex="-1">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <button class="close" data-dismiss="modal" type="button" aria-hidden="true">×</button>
-                        <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
+                <div class="modal-body">
+                    <div class="alert alert-success alert-dismissible fade in" id="alert-success" role="alert"
+                        style="position:sticky; top:20px;display:none;">
+                        <div id="mess"></div>
                     </div>
-                    <form action="{{ route('locations.store') }}" method="POST" enctype="multipart/form-data">
+                    <form id="idForm" data-parsley-validate="" action="{{ route('locations.store') }}"
+                        novalidate="">
                         @csrf
-                        <div class="modal-body">
-                            <div class="input_container">
-                                <input id="fileUpload" name="file" type="file" style="width: 100%;">
-                            </div>
-                            <div style="margin-top:10px;font-size:18px;">
-                                <p>Accepted files (click to download sample) </p>
-                            </div>
-                            <ul>
-                                <li style="color: rgba(0, 0, 255, 0.901)">CSV (.csv)</li>
-                                <li style="color: rgba(0, 0, 255, 0.901)">EXCEL (.xlsx)</li>
-                            </ul>
+                        <div class="form-group">
+                            <input class="form-control" id="location_name" name="location_name" type="text"
+                                parsley-trigger="change" placeholder="Department name">
                         </div>
-                        <div class="modal-footer">
-                            <button class="btn btn-default waves-effect" type="reset">Cancel</button>
-                            <button class="btn btn-primary waves-effect waves-light" type="submit">Import</button>
+                        <div class="text-danger m-3" id="error_location"></div>
+                        <div class="row">
+                            <div class="form-group col-md-4">
+                                <input class="form-control" type="number" id="floot" placeholder="Floot">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input class="form-control" type="number" id="unit" placeholder="Unit">
+                            </div>
+                            <div class="form-group col-md-4">
+                                <input class="form-control" type="number" id="zip_code" placeholder="Zip code">
+                            </div>
                         </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="building" placeholder="Building">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="street_address" placeholder="Street address">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="city_name" placeholder="City name">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="state_name" placeholder="State name">
+                        </div>
+                        <div class="form-group">
+                            <input class="form-control" type="text" id="country" placeholder="Contry">
+                        </div>
+
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6" style="text-align: center;">
+                                <button class="btn btn-primary waves-effect waves-light" type="submit"
+                                    style="width:80%">
+                                    CREATE DEPARTMENT
+                                </button>
+                            </div>
+                            <div class="col-md-6" style="text-align: center;">
+                                <button class="btn btn-default waves-effect" id="cancel" type="reset"
+                                    style="width:80%">
+                                    Cancel
+                                </button>
+                            </div>
+                        </div>
+
                     </form>
-                </div><!-- /.modal-content -->
-            </div><!-- /.modal-dialog -->
-        </div>
-    @endsection
-@endcan
+                </div>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!--Model edit -->
+    <div class="modal fade" id="custom-width-modal" role="dialog" aria-labelledby="custom-width-modalLabel"
+        aria-hidden="true" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myLargeModalLabel">NEW LOCATION</h4>
+                </div>
+                <div class="modal-body">
+                    <form id="idFormEdit" data-parsley-validate="" action="{{ route('locations.update', [0]) }}"
+                        novalidate="" method="POST">
+                        @csrf
+                        @method('PUT')
+                        <input id="idedit" name="id" type="hidden" value="your-hidden-id-value">
+                        <div class="form-group">
+                            <input class="form-control" id="location_name_edit" name="location_name" type="text"
+                                parsley-trigger="change" placeholder="Location name">
+                        </div>
+                        <div class="text-danger m-3" id="error_locationEdit"></div>
+                        <div class="form-group">
+                            <textarea class="form-control" id="note_edit" name="note" rows="5" placeholder="Notes"></textarea>
+                        </div>
+                        <div class="form-group" style="width: 60%">
+                            <div class="btn-group bootstrap-select show-tick">
+                                <select class="selectpicker show-tick" id="selectDepartmentEdit"
+                                    name="department_model_id_edit" tabindex="-98">
+                                    <option value="0">Select Departments</option>
+                                    @foreach ($departments as $item)
+                                        <option value="{{ $item['id'] }}">{{ $item['department_name'] }}</option>
+                                    @endforeach
+                                </select>
+                            </div>
+                        </div>
+                        <div class="text-danger m-3" id="error_selectDepartmentEdit"></div>
+                        <div id="showdepartmentEdit" style="display: none;">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" id="floorEdit" name="floor" type="text"
+                                            readonly parsley-trigger="change" required="" placeholder="FLOOR">
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" id="unitEdit" name="unit" readonly
+                                            placeholder="UNIT">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="buildingEdit" name="building" type="text" readonly
+                                    parsley-trigger="change" required="" placeholder="BUILDING">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="addressEdit" name="address" type="text" readonly
+                                    parsley-trigger="change" required="" placeholder="STREET ADDRESS">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="cityEdit" name="city" type="text" readonly
+                                    parsley-trigger="change" required="" placeholder="CITY">
+                            </div>
+                            <div class="form-group">
+                                <input class="form-control" id="stateEdit" name="state" type="text" readonly
+                                    parsley-trigger="change" required="" placeholder="STATE">
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <select class="selectpicker show-tick" id="countryEdit" name="country"
+                                            tabindex="-98">
+                                            <option>COUNTRY</option>
+                                            <option>HCM</option>
+                                            <option>Cà Mau</option>
+                                            <option>Lào Cai</option>
+                                        </select>
+                                    </div>
+
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <input class="form-control" id="zipcodeEdit" name="zipcode" type="text"
+                                            readonly parsley-trigger="change" required="" placeholder="ZIP CODE">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <hr>
+                        <div class="row">
+                            <div class="col-md-6" style="text-align: center;">
+                                <button class="btn btn-primary waves-effect waves-light" type="submit"
+                                    style="width:80%">
+                                    EDIT
+                                </button>
+                            </div>
+                            <div class="col-md-6" style="text-align: center;">
+                                <button class="btn btn-default waves-effect" id="cancel" type="reset"
+                                    style="width:80%">
+                                    CANCEL
+                                </button>
+                            </div>
+                        </div>
+
+                    </form>
+                </div>
+            </div>
+        </div><!-- /.modal-dialog -->
+    </div>
+    <!-- Model import -->
+    <div class="modal fade" id="myModal" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true"
+        tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button class="close" data-dismiss="modal" type="button" aria-hidden="true">×</button>
+                    <h4 class="modal-title" id="myModalLabel">Modal Heading</h4>
+                </div>
+                <form action="{{ route('locations.store') }}" method="POST" enctype="multipart/form-data">
+                    @csrf
+                    <div class="modal-body">
+                        <div class="input_container">
+                            <input id="fileUpload" name="file" type="file" style="width: 100%;">
+                        </div>
+                        <div style="margin-top:10px;font-size:18px;">
+                            <p>Accepted files (click to download sample) </p>
+                        </div>
+                        <ul>
+                            <li style="color: rgba(0, 0, 255, 0.901)">CSV (.csv)</li>
+                            <li style="color: rgba(0, 0, 255, 0.901)">EXCEL (.xlsx)</li>
+                        </ul>
+                    </div>
+                    <div class="modal-footer">
+                        <button class="btn btn-default waves-effect" type="reset">Cancel</button>
+                        <button class="btn btn-primary waves-effect waves-light" type="submit">Import</button>
+                    </div>
+                </form>
+            </div><!-- /.modal-content -->
+        </div><!-- /.modal-dialog -->
+    </div>
+@endsection
+{{-- @endcan --}}
 @cannot('view-location')
     @section('content')
         <div style="height: 100%;display: flex;justify-content: center;">
