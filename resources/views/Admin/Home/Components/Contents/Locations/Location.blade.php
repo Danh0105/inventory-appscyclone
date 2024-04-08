@@ -123,18 +123,20 @@
 																												</tbody>
 																								</table>
 																				</div>
-																				<p>This is not my task</p>
-																				{{-- <div class="tab-pane" id="department1">
-                        <div class="row" style="display: flex;justify-content: right;margin:5px;">
-                            <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
-                                data-target=".bs-example-modal-lg" style="margin:10px">
-                                NEW DEPARTMENT
-                            </button>
-                            <button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
-                                data-target="#myModal" style="margin:10px">IMPORT
-                                DEPARTMENT</button>
-                        </div>
-                    </div> --}}
+
+																				<div class="tab-pane" id="department1">
+																								<div class="row" style="display: flex;justify-content: right;margin:5px;">
+																												<p>This is not my task</p>
+																												{{-- 		<button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+																																data-target=".bs-example-modal-lg" style="margin:10px">
+																																NEW DEPARTMENT
+																												</button>
+																												<button class="btn btn-primary waves-effect waves-light" data-toggle="modal"
+																																data-target="#myModal" style="margin:10px">IMPORT
+																																DEPARTMENT
+																												</button> --}}
+																								</div>
+																				</div>
 																</div>
 
 												</div>
